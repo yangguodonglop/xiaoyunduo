@@ -1,0 +1,108 @@
+// 全局样式
+.v-table-header-row {
+	background-color: #FAFAFA;
+}
+
+.v-table-title-cell {
+	font-weight: bold;
+}
+
+.v-table-body-cell{
+	border: 1px solid #F7F7F7;
+}
+
+
+.table-wrap .v-table-views {
+	border: 1px solid #F7F7F7;
+}
+
+.table-s {
+	border: 1px solid #DDDDDD !important;
+}
+
+
+
+
+.table-s .v-table-title-cell {
+	font-size: 24upx;
+	height:64upx !important;
+	line-height: 64upx !important;
+}
+.table-s .cell-style-small .v-table-body-cell{
+	 color: #333333;
+	 height: 64upx !important;
+	 line-height: 64upx !important;
+	 border-right: 1px solid #F0F0F5;
+	 border-bottom: 1px solid #F0F0F5;
+	 font-size: 24upx;
+}
+.table-noborder .v-table-title-cell {
+	
+}
+
+.column-cell-bg{
+  background-color: #16afe4b3;
+  color: #FFFFFF
+}
+.column-cell-bg .v-table-body-cell{
+   border-color: #1cbbb4;
+}
+
+.column-cell-bg:last-child .op-btn{
+   /* display: none; */
+   
+}
+.column-cell-bg:last-child .op-btn .button-wrap {
+  color: #FFFFFF;
+}
+
+/* .v-table-class{
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+.v-table-body-cell {
+	height:80upx !important;
+	line-height: 80upx !important;
+}
+.v-table-header-row {
+	background-color: #F2F2F8;
+}
+.horizontal-border {
+  border-bottom-width: 0px !important; 
+}
+.v-table-title-cell {
+	font-weight: bold;
+}
+
+.table-s {
+	border: 1px solid #DDDDDD !important;
+}
+
+.table-wrap .v-table-views {
+	border: 1px solid #F7F7F7;
+}
+
+
+.cell-style-small .v-table-body-cell{
+	 color: #333333;
+	 height: 30px !important;
+	 line-height: 30px !important;
+	 border-right: 1px solid #F0F0F5;
+	 border-bottom: 1px solid #F0F0F5;
+}
+
+.cell-style-small .v-table-body-cell{
+	 color: #333333;
+	 height: 30px !important;
+	 line-height: 30px !important;
+	 border-right: 1px solid #F0F0F5;
+	 border-bottom: 1px solid #F0F0F5;
+}
+ */
+
+
+/* .v-page-total {
+	display: none !important;
+}
+.v-page-select {
+		display: none !important;
+} */

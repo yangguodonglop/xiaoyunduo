@@ -1,0 +1,141 @@
+{
+	"pages": [
+
+		{
+			"path" : "pages/user/login/login",
+			"style" :
+			{
+				"navigationBarTitleText": "登录",
+				"enablePullDownRefresh": false
+			}
+
+		},
+		{
+			"path" : "pages/user/main/addLabel",
+			"style" :
+			{
+				"navigationBarTitleText": "标签管理",
+				"enablePullDownRefresh": false
+			}
+
+		},
+		{
+			"path" : "pages/customer/visitor",
+			"style" :
+			{
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+
+		},
+		{
+			"path" : "pages/user/main/my",
+			"style" :
+			{
+				"navigationBarTitleText": "我的主页",
+				"enablePullDownRefresh": true
+			}
+
+		},
+
+		{
+			"path" : "pages/user/main/index",
+			"style" :
+			{
+				"navigationBarTitleText": "主页",
+				"enablePullDownRefresh": true
+			}
+
+		},
+
+		{
+			"path" : "pages/user/login/register",
+			"style" :
+			{
+				"navigationBarTitleText": "注册",
+				"enablePullDownRefresh": false
+			}
+
+		},
+		{
+			"path" : "pages/user/login/protocol",
+			"style" :
+			{
+				"navigationBarTitleText": "用户协议",
+				"enablePullDownRefresh": false
+			}
+
+		},
+
+		{
+			"path" : "pages/user/main/index",
+			"style" :
+			{
+				"navigationBarTitleText": "主页",
+				"enablePullDownRefresh": false
+			}
+
+		},
+		{
+			"path" : "pages/user/main/indexEdit",
+			"style" :
+			{
+				"navigationBarTitleText": "编辑",
+				"enablePullDownRefresh": false
+			}
+
+		},
+		{
+			"path" : "pages/user/main/indexAdd",
+			"style" :
+			{
+				"navigationBarTitleText": "新增",
+				"enablePullDownRefresh": false
+			}
+
+		},
+		{
+			"path" : "pages/user/main/indexAddBatch",
+			"style" :
+			{
+				"navigationBarTitleText": "批量新增",
+				"enablePullDownRefresh": false
+			}
+
+		},
+
+
+		{
+			"path" : "pages/user/login/findPassword",
+			"style" :
+			{
+				"navigationBarTitleText": "忘记密码",
+				"enablePullDownRefresh": false
+			}
+
+		}
+
+    ],
+	"tabBar": {
+		"color": "#7A7E83",
+		"selectedColor": "#3cc51f",
+		"borderStyle": "black",
+		"backgroundColor": "#ffffff",
+		"list": [{
+			"pagePath": "pages/user/main/index",
+
+			"text": "首页"
+		}, {
+			"pagePath": "pages/user/main/my",
+
+			"text": "个人中心"
+		}]
+	},
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "uni-app",
+		"navigationBarBackgroundColor": "#F8F8F8",
+		"backgroundColor": "#F8F8F8"
+	},
+	"uniIdRouter": {}
+}
