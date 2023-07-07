@@ -3,18 +3,18 @@
     <view class="head">
       <view class="head_bg">
         <view class="head_inner_bg">
-          <image style="width: 55px;height: 65px;" :src="imgInfo.head" class="head_logo" />
+          <image style="width: 320px;height: 260px;" :src="imgInfo.head" class="head_logo"/>
         </view>
       </view>
     </view>
 
-    <view class="app-name">XXXX管理APP</view>
+    <view class="app-name"></view>
     <view class="login_form">
       <view class="input">
         <view class="img">
           <image style="width:27px;height: 27px;" :src="imgInfo.icon_user" />
         </view>
-        <input type="text" v-model="username" placeholder="请输入手机号码">
+        <input type="text" style="color: #fff;" v-model="username" placeholder="请输入手机号码">
         <view class="img">
           <image @tap="delUser" class="img_del" :src="imgInfo.icon_del" />
         </view>
@@ -24,7 +24,7 @@
         <view class="img">
           <image style="width:20px;height: 25px;" :src="imgInfo.icon_pwd" />
         </view>
-        <input class="input-active"  v-model="password" :type="showPasswordType?'password':'text'"  @input="inputPwd" placeholder="请输入登录密码">
+        <input style="color: #fff;" class="input-active"  v-model="password" :type="showPasswordType?'password':'text'"  @input="inputPwd" placeholder="请输入登录密码">
         <view class="img" >
           <image class="img_pwd_switch" @click="showPassword()" :src="imgInfo.icon_pwd_switch" />
         </view>
@@ -32,33 +32,30 @@
       <view class="line" />
       <view class="input">
         <view class="img">
-          <image style="width:20px;height: 25px;" :src="imgInfo.icon_pwd" />
+          <image style="width:30px;height: 35px;" :src="imgInfo.icon_pwd1" />
         </view>
-        <input type="text" v-model="invitationCode"  placeholder="请输入邀请码">
+        <input style="color: #fff;" type="text" v-model="invitationCode"  placeholder="请输入邀请码">
         <view class="img" >
           <image @tap="delUserActive" class="img_del" :src="imgInfo.icon_del" />
         </view>
       </view>
       <view class="line" />
-
-
-
       <view class="input">
         <view>
-        <input type="text"  v-model="verificationCode" placeholder="请输入6位输验证码">
+        <input type="text" style="color: #fff;"  v-model="verificationCode" placeholder="请输入6位输验证码">
         </view>
         <view style="display: flex;align-items: center;">
           <button  size="mini"  class="mini-btn" type="primary" @tap="login">获取验证码</button>
         </view>
       </view>
     </view>
-    <view style="margin: 0px 20;color: #0A98D5;text-align:left;font-size: 14px;line-height: 30px;margin-left:20px;display: flex;align-items: center"
+    <view style="margin: 0px 20;color: #0A98D5;text-align:left;font-size: 14px;line-height: 45px;margin-left:20px;display: flex;align-items: center"
           @tap="findPwd">
         <checkbox :checked="isCheckeds" @click="isChecked()" style="display: flex;align-items: center;margin: 5px 0;margin-left: 10px" />
         <div  @click="toCheckProtocol()" style="display: flex;align-items: center">请阅读用户协议</div>
 
     </view>
-    <button class="submit"  type="primary" @tap="login">立即注册</button>
+    <button class="submit"  style="background: #007aff" type="primary" @tap="login">立即注册</button>
   </view>
 </template>
 <script>
@@ -82,11 +79,14 @@ export default {
       invitationCode:'',
       pwdType: 'password',
       imgInfo: {
-        head: isUni ? '/static/head.png' : require('./images/head.png'),
+        head: isUni ? '/static/xyd.png' : require('./images/xyd.png'),
         icon_user: isUni ? '/static/icon_user.png' : require('./images/icon_user.png'),
         icon_del: isUni ? '/static/icon_del.png' : require('./images/icon_del.png'),
         icon_pwd: isUni ? '/static/icon_pwd.png' : require('./images/icon_pwd.png'),
-        icon_pwd_switch: isUni ? '/static/icon_pwd_switch.png' : require('./images/icon_pwd_switch.png'),
+        icon_pwd1: isUni ? '/static/yqm.png' : require('./images/yqm.png'),
+        // icon_pwd_switch: isUni ? '/static/icon_pwd_switch.png' : require('./images/icon_pwd_switch.png'),
+        icon_pwd_switch:  require('./images/show.png'),
+
         qq: isUni ? '/static/qq.png' : require('./images/qq.png'),
         wechat: isUni ? '/static/wechat.png' : require('./images/wechat.png'),
         weibo: isUni ? '/static/weibo.png' : require('./images/weibo.png')
@@ -108,6 +108,11 @@ export default {
     },
     showPassword(){
       this.showPasswordType=!this.showPasswordType
+      if(this.showPasswordType){
+        this.imgInfo.icon_pwd_switch= require('./images/show.png')
+      }else {
+        this.imgInfo.icon_pwd_switch=require('./images/hide.png')
+      }
     },
     inputUsername(e) {
       that.username = e.target.value
@@ -127,10 +132,11 @@ export default {
     login() {
       const str = {
         accountName:this.username,
-        invitationCode:'E10ADC3949BA59ABBE56E057F20F883E',
+        invitationCode:this.invitationCode,
         verificationCode:'123456',
         password:md5(this.password)
       }
+      console.log(str)
       if(!this.isCheckeds){
         uni.showToast({
           icon: 'error',
@@ -190,7 +196,7 @@ export default {
 page {
   height: auto;
   min-height: 100%;
-  background-color: #f5f6f8;
+  background-color: #00102A;
 }
 </style>
 <style lang="scss" scoped>
@@ -214,7 +220,7 @@ $text-color: #B6B6B6;
     text-transform: inherit;
     text-shadow: inherit;
     border: none;
-    width: 224px;
+    width: 100%;
     height: 30px;
   }
   .input-active:focus{
@@ -227,24 +233,25 @@ $text-color: #B6B6B6;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding-top: 200upx;
-  padding-bottom: 20upx;
+  padding-top: 200 upx;
+  padding-bottom: 20 upx;
+  margin-top: 60px;
 
   .head_bg {
-    border: 1px solid #fbecf1;
+    //border: 1px solid #fbecf1;
     border-radius: 50px;
-    width: 100px;
-    height: 100px;
+    width: 320px;
+    height: 260px;
     display: flex;
     align-items: center;
     justify-content: center;
 
     .head_inner_bg {
       border-radius: 40px;
-      width: 80px;
-      height: 80px;
+      width: auto;
+      height: auto;
       display: flex;
-      background-color: #fc2c5d;
+      //background-color: #fc2c5d;
       align-items: flex-end;
       justify-content: center;
       overflow: hidden;
@@ -267,6 +274,7 @@ $text-color: #B6B6B6;
   border: 1px solid $form-border-color;
   border-radius: 10px;
   margin-bottom: 0px;
+  margin-top: 60px;
 
   .line {
     width: 100%;
@@ -299,7 +307,7 @@ $text-color: #B6B6B6;
 
     .img_pwd_switch {
       width: 28px;
-      height: 12px;
+      height: 28px;
     }
 
     input {
@@ -319,8 +327,8 @@ $text-color: #B6B6B6;
   margin-left: 20px;
   margin-right: 20px;
   color: white;
-  background-color: rgba(252, 44, 93, 1.0);
-  -webkit-tap-highlight-color: rgba(252, 44, 93, 1.0);
+  //background-color: rgba(252, 44, 93, 1.0);
+  //-webkit-tap-highlight-color: rgba(252, 44, 93, 1.0);
 
   &:active {
     color: #B6B6B6;

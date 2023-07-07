@@ -49,6 +49,7 @@ import store from '@/store/index';
 import axios from 'axios'
 import {fi} from "date-fns/locale";
 import UniIcons from "../../../uni_modules/uni-icons/components/uni-icons/uni-icons.vue";
+import {baseUrl} from "../../../common/vmeitime-http/user";
 
 export default {
   name: "index",
@@ -324,8 +325,10 @@ export default {
         mask: true // 是否显示遮罩层
       })
       try {
+        const url=baseUrl+'/personal_collection/myCollection/putItem'
+
         const response = await axios.post(
-            'http://175.27.187.172:8001/personal_collection/myCollection/putItem',
+            url,
             this.formData,
             {
               headers: {

@@ -32,9 +32,16 @@
       </view>
 
     </view>
-    <view style="margin: 0px 20;color: #0A98D5;text-align:right;font-size: 14px;line-height: 30px;margin-right: 15px;"
-          @tap="findPwd">忘记密码？
+    <view style="display: flex;color: rgb(10, 152, 213);justify-content: space-between">
+      <view style="display: flex;">
+      <checkbox :checked="isCheckeds" @click="isChecked()" style="display: flex;align-items: center;margin: 5px 0;margin-left: 25px" />
+      <div  @click="toCheckProtocol()" style="display: flex;align-items: center;font-size: 14px;">请阅读用户协议</div>
+      </view>
+      <view style="margin: 0px 20;color: #0A98D5;text-align:right;font-size: 14px;line-height: 40px;margin-right: 15px;"
+            @tap="findPwd">忘记密码？
+      </view>
     </view>
+
     <button class="submit" style="margin-top: 0px;background: #007aff;" type="primary" @tap="login">登录</button>
     <button class="submit" style="background: #007aff" type="primary" @tap="loginRegister">注册新账户</button>
 
@@ -49,6 +56,7 @@ export default {
   data() {
     const isUni = typeof (uni) !== 'undefined'
     return {
+      isCheckeds:true,
       showPasswordType: 'password',
       testss: 'password',
       username: '',
@@ -60,7 +68,7 @@ export default {
         icon_user: isUni ? '/static/icon_user.png' : require('./images/icon_user.png'),
         icon_del: isUni ? '/static/icon_del.png' : require('./images/icon_del.png'),
         icon_pwd: isUni ? '/static/icon_pwd.png' : require('./images/icon_pwd.png'),
-        icon_pwd_switch: isUni ? '/static/icon_pwd_switch.png' : require('./images/icon_pwd_switch.png'),
+        icon_pwd_switch:  require('./images/show.png'),
         qq: isUni ? '/static/qq.png' : require('./images/qq.png'),
         wechat: isUni ? '/static/wechat.png' : require('./images/wechat.png'),
         weibo: isUni ? '/static/weibo.png' : require('./images/weibo.png')
@@ -70,14 +78,39 @@ export default {
   mounted() {
     that = this;
   },
+  onLoad() {
+    uni.setNavigationBarTitle({
+      title: '小云朵'
+    });
+  },
   methods: {
+    toCheckProtocol(){
+      uni.navigateTo({
+        url: '/pages/user/login/protocol'
+      })
+    },
+    isChecked(){
+      this.isCheckeds=!this.isCheckeds
+    },
     showPassword() {
       this.showPasswordType = !this.showPasswordType
+      if(this.showPasswordType){
+        this.imgInfo.icon_pwd_switch= require('./images/show.png')
+      }else {
+        this.imgInfo.icon_pwd_switch=require('./images/hide.png')
+      }
     },
     delUser() {
       this.username = ''
     },
     login() {
+      if(!this.isCheckeds){
+        uni.showToast({
+          icon: 'error',
+          title: '请勾选用户协议'
+        });
+        return false
+      }
       const str = {
         accountName: this.username,
         loginWay: 1,
@@ -105,11 +138,27 @@ export default {
           }, 1000);
 
         } else {
-          uni.showToast({
-            icon: 'error',
-            position: 'bottom',
-            title: '登录失败'
-          });
+          if(res.status==-109 ){
+            uni.showToast({
+              icon: 'error',
+              position: 'bottom',
+              title: '找不到账号'
+            });
+          } else if(res.status==-110){
+            uni.showToast({
+              icon: 'error',
+              position: 'bottom',
+              title: '密码错误'
+            });
+          }
+          else if(res.status==-103){
+            uni.showToast({
+              icon: 'error',
+              position: 'bottom',
+              title: '账号错误'
+            });
+          }
+
         }
 
       })
@@ -165,7 +214,7 @@ $text-color: #B6B6B6;
     text-transform: inherit;
     text-shadow: inherit;
     border: none;
-    width: 224px;
+    width: 100%;
     height: 30px;
   }
 
@@ -181,6 +230,7 @@ $text-color: #B6B6B6;
   justify-content: center;
   padding-top: 200 upx;
   padding-bottom: 20 upx;
+  margin-top: 60px;
 
   .head_bg {
     //border: 1px solid #fbecf1;
@@ -212,7 +262,7 @@ $text-color: #B6B6B6;
 
 .login_form {
   display: flex;
-  margin: 20px 20px 0px 20px;
+  margin: 60px 20px 0px 20px;
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -250,7 +300,7 @@ $text-color: #B6B6B6;
 
     .img_pwd_switch {
       width: 28px;
-      height: 12px;
+      height: 28px;
     }
 
     input {
@@ -270,8 +320,8 @@ $text-color: #B6B6B6;
   margin-left: 20px;
   margin-right: 20px;
   color: white;
-  background-color: rgba(252, 44, 93, 1.0);
-  -webkit-tap-highlight-color: rgba(252, 44, 93, 1.0);
+  //background-color: rgba(252, 44, 93, 1.0);
+  //-webkit-tap-highlight-color: rgba(252, 44, 93, 1.0);
 
   &:active {
     color: #B6B6B6;

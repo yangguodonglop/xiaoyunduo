@@ -62,7 +62,7 @@
 
 <script>
 import axios from 'axios'
-import {putLabel} from "../../../common/vmeitime-http/user";
+import {baseUrl} from "../../../common/vmeitime-http/user";
 
 export default {
   name: "index",
@@ -215,14 +215,10 @@ export default {
           count: 9,
         });
         if (error) {
-          console.log(error);
         } else if (res.tempFiles && res.tempFiles.length > 0) {
-          console.log(res.tempFiles)
           res.tempFiles.map((item)=>{
             this.totalArr.push(item)
           })
-
-          console.log(this.totalArr)
           if (this.totalArr.length >= 3) {
             this.imageList =this.totalArr.slice(0, 3)
             this.imageListActive = this.totalArr.slice(3, this.totalArr.length)
@@ -234,13 +230,19 @@ export default {
           }
 
           const formData = new FormData();
-          console.log(this.totalArr.length)
-          console.log(this.totalArr)
           for (let i = 0; i < this.totalArr.length; i++) {
             const file = this.totalArr[i];
+            let contentType = '';
+            switch (file.type) {
+              case 'image/jpeg': contentType = 'image/jpeg'; break;
+              case 'image/png': contentType = 'image/png'; break;
+              case 'video/mp4': contentType = 'video/mp4'; break;
+              default: contentType = 'application/octet-stream'; break;
+            }
             const blob = await this.getBlobFromUrl(file.path);
-            console.log(blob)
             formData.append(`item_${i}`, blob, file.name);
+            formData.set(`item_${i}.content-type`, contentType);
+
           }
           this.formData = formData;
         } else {
@@ -286,8 +288,9 @@ export default {
       this.formData.append('labels',JSON.stringify(tempArr))
 
       try {
+        const url=baseUrl+'/personal_collection/myCollection/putItem'
         const response = await axios.post(
-            'http://175.27.187.172:8001/personal_collection/myCollection/putItem',
+            url,
             this.formData,
             {
               headers: {

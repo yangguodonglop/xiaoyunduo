@@ -14,4 +14,8 @@
 
 <style>
 	/*每个页面公共css */
+  .uni-tabbar__label{
+    font-size: 16px !important;
+    font-weight: bold;
+  }
 </style>

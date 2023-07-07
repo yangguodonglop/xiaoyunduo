@@ -1,5 +1,6 @@
 import http from './interface'
-const baseUrl='http://175.27.187.172:8001'
+export const baseUrl='http://175.27.187.172:8001'
+// export const baseUrl='http://192.168.1.192:8001'
 
 export const login = (data) => {
 
@@ -76,7 +77,7 @@ export const getItem = (data) => {
         method: 'POST',
         header: {
             'sID': JSON.parse(localStorage.getItem('userData')),
-            'content-type': 'application/x-www-form-urlencoded'
+            // 'content-type': 'application/x-www-form-urlencoded'
         },
 
         data,
@@ -326,7 +327,8 @@ export default {
     putLabel,
     getLabel,
     getOwnerInfo,
-    getAgreement
+    getAgreement,
+    baseUrl
 
 }
 

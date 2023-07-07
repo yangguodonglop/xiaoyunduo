@@ -22,23 +22,23 @@
       </view>
       <view class="item">
         <view style="display: flex;">
-          <view style="width:70px;text-align: right;">昵称:</view>
-          <view>{{ this.nickName == '' ? this.phone : this.nickName }}</view>
+          <view style="width:80px;text-align: right;">昵称 :</view>
+          <view style="margin-left: 5px;">{{ this.nickName == '' ? this.phone : this.nickName }}</view>
         </view>
         <uni-icons class="icon-item" type="compose" size="30" @click="editName()"></uni-icons>
       </view>
       <view class="item">
         <view style="display: flex">
-        <view style="width:70px;text-align: right;">手机号码:</view>
-        <view>{{ this.phone }}</view>
+        <view style="width:80px;text-align: right;">手机号码 :</view>
+        <view style="margin-left: 5px;">{{ this.phone }}</view>
         </view>
 <!--        <view>手机号码:{{ this.phone }}</view>-->
 <!--        <uni-icons class="icon-item" type="compose" size="30" @click="addNotice()"></uni-icons>-->
       </view>
       <view class="item">
-        <view style="font-size: 12px;display: flex;">
-          <view style="width:70px;font-size: 16px;text-align: right;">邀请码:</view>
-          <view style="display: flex;align-items: center">{{ this.inviteCode == '' ? '暂无邀请码' : inviteCode.slice(0, 20) }}</view>
+        <view style="display: flex;">
+          <view style="width:80px;font-size: 16px;text-align: right;">邀请码 :</view>
+          <view style="display: flex;align-items: center;margin-left: 5px;">{{ this.inviteCode == '' ? '暂无邀请码' : inviteCode.slice(0, 20) }}</view>
 
 <!--          <span style="font-size: 16px;">邀请码：</span>{{ this.inviteCode == '' ? '暂无邀请码' : inviteCode.slice(0, 20) }}-->
         </view>
@@ -85,6 +85,7 @@
 <script>
 import axios from "axios";
 import {format, addDays} from "date-fns";
+import {baseUrl} from "../../../common/vmeitime-http/user";
 
 export default {
   name: "my",
@@ -237,36 +238,29 @@ export default {
       this.totalArr = []
 
       try {
-        const [error, res] = await uni.chooseImage({
+        const [error, res] = await uni.chooseFile({
           count: 9,
         });
         if (error) {
           console.log(error);
         } else if (res.tempFiles && res.tempFiles.length > 0) {
-          console.log(res.tempFiles)
           res.tempFiles.map((item) => {
             this.totalArr.push(item)
           })
 
-          console.log(this.totalArr)
           if (this.totalArr.length >= 3) {
             this.imageList = this.totalArr.slice(0, 3)
             this.imageListActive = this.totalArr.slice(3, this.totalArr.length)
-            console.log(this.imageListActive)
           } else {
             this.imageList = this.totalArr.slice(0, this.totalArr.length)
             this.imageListActive = []
 
           }
-
           const formData = new FormData();
-          console.log(this.totalArr.length)
-          console.log(this.totalArr)
           for (let i = 0; i < this.totalArr.length; i++) {
             const file = this.totalArr[i];
             const blob = await this.getBlobFromUrl(file.path);
-            console.log(blob)
-            formData.append(`file`, blob, file.name);
+            formData.append(`file`, blob);
           }
           this.formData = formData;
           this.uploadImages()
@@ -305,26 +299,25 @@ export default {
       // this.formData.append('describe', this.value)
 
       try {
+
+        const url=baseUrl+'/personal_collection/myCollection/putItem'
         const response = await axios.post(
-            'http://175.27.187.172:8001/personal_collection/accountInfo/updateHead',
+            url,
             this.formData,
             {
               headers: {
                 'sID': JSON.parse(localStorage.getItem('userData')),
                 'Content-Type': 'multipart/form-data',
+                // 'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 14_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148',
+                // 'Accept-Encoding': 'gzip, deflate, br',
+
               },
             }
         );
         if (response.data.status == 0) {
-          console.log(response.data)
           uni.hideLoading()
           this.uploadType = false
           this.getMyInfo()
-          // setTimeout(function(){
-          //   uni.switchTab({
-          //     url:'/pages/user/main/index'
-          //   })
-          // },1000);
 
         } else {
           uni.showToast({
@@ -351,9 +344,10 @@ export default {
 
 .item-bg-img {
   //background: url("../../../static/img/headImg.jpg") no-repeat center;
-  background: url("../../../static/img/avatar.jpg") no-repeat center;
+  //background: url("../../../static/img/avatar.jpg") no-repeat center;
   height: 200px;
   background-size: cover;
+  background-color: #CCCCCC;
 }
 
 .content {

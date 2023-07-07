@@ -1,21 +1,18 @@
 <template>
   <view style="position: relative">
+    <view class="customer-service" @click="showMessage">
+      <uni-icons type="chat" size="30" color="#fff"></uni-icons>
+    </view>
     <view>
       <view class="button-item">
-        <view class="tip">文件总数:{{ fileAll }}</view>
-        <!--        <view class="tip">今日访问次数:{{ fileDay }}</view>-->
+        <view class="tip">已收藏总数:{{ fileAll }}</view>
       </view>
-      <!--      <view class="button-item">-->
-      <!--        <view class="tip">剩余访问次数:111</view>-->
-      <!--        <view class="tip">购买次数:222</view>-->
-      <!--      </view>-->
       <view class="button-item" style="position: relative;">
-        <view class="button-one" @click="checkNotice">
+        <view class="button-one" @click="checkNotice" style="background: #81B337;">
           我的公告
         </view>
-        <uni-icons style="position: absolute;top:4px;right: 20px;z-index: 100000;width: 30px;" class="icon-item"
-                   type="compose" size="30" @click="addNotice"></uni-icons>
-
+        <uni-icons style="position: absolute;top:4px;right: 25px;z-index: 100000;width: 30px;color: #2979ff;"
+                   class="icon-item" type="compose" size="30" @click="addNotice"></uni-icons>
       </view>
       <view class="button-item">
         <view class="button-one button-two" @click="toshare()">
@@ -23,28 +20,40 @@
         </view>
       </view>
       <view class="button-item">
-        <view class="button-one button-three" @click="toAdd()">
+        <view class="button-one " @click="toAdd()" style="background: #81B337;">
           添加收藏
         </view>
       </view>
       <view class="button-item">
-        <view class="button-one button-three" @click="toAddBatch()" style="background: rgb(169 60 71);">
+        <view class="button-one button-three" @click="toAddBatch()" style="background: #81B337;">
           批量添加收藏
         </view>
       </view>
       <view class="button-item" style="margin-top: 0px;">
-        <view class="button-one button-two" style="background: #86a9de;" @click="inputDialogToggle">
+        <view class="button-one button-two" style="background: rgb(169 60 71);" @click="inputDialogToggle">
           一键删除
         </view>
       </view>
     </view>
-    <view v-for="(item,index) in infoList" :key="index+11" style="margin:20px auto;margin-bottom: 20px;padding: 5px;width: 98%;background: #FFFFFF; border-radius: 3px;
-   border: 1px solid #999;margin-top: 20px;">
+    <view class="labels" style="padding: 10px;padding-bottom: 0px">
+      <view style="margin-left: 5px;display: flex;flex-wrap: wrap;height: auto;margin-top: 5px;">
+        <view style="margin-left: 5px;height: auto;height: 30px" v-for="(tag, index) in tags" :key="index">
+          <text
+              :class="[tag.active ? 'active' : '']"
+              @click="toggleTag(index)"
+              class="tag"
+          >
+            {{ tag.name }}
+          </text>
+        </view>
+      </view>
+      <!--      <text class="button-text" style="margin-left: 10px;" @click="linkAddLabel">管理标签</text>-->
+    </view>
+    <view v-for="(item,index) in infoList" :key="index+11" class="img-content" style="">
       <view
           style="display: flex;justify-content:space-between;align-items: center;border-radius: 3px;border: 1px solid #999;border-radius: 5px;padding: 5px;padding-bottom: 8px;">
         <view class="title" style="display: flex;align-items: center;justify-content:start;color: #ff7600">
-          <!--        <img src="../login/images/test.png" width="45" height="50" alt="" style="margin-right: 5px;">-->
-          0{{ index + 1 }}号美妞
+          {{ index + 1 }}
         </view>
         <view>
           <uni-tag text="编辑" @click="toEdit(item)" type="primary" size="small" style="margin-right: 10px;"/>
@@ -63,9 +72,19 @@
       <div class="container">
         <video v-if="item.objs[0].suffix=='.mp4'" id="myVideo" :src="`${item.objs[0].showURL}.mp4`" controls
                style="width: 100%;"></video>
+<!--        <div v-if="item.objs[0].suffix!=='.mp4'" @click="opens(item,0)"-->
+<!--             style="width: 100%;height: 225px;background-repeat: no-repeat;background-position: center;"-->
+<!--             :style="{ backgroundImage: `url(${item.objs[0].showURL})`, backgroundSize: 'contain', }">-->
+<!--        </div>-->
         <div v-if="item.objs[0].suffix!=='.mp4'" @click="opens(item,0)"
-             style="width: 100%;height: 225px;background-repeat: no-repeat;background-position: center center;"
-             :style="{ backgroundImage: `url(${item.objs[0].showURL})`, backgroundSize: 'cover' }"></div>
+             style="width: 100%;height: 300px;background-repeat: no-repeat;background-position: center;">
+          <img :src="item.objs[0].showURL"  style="width: 100%; height: 100%; object-fit: cover;">
+        </div>
+
+<!--        <div v-if="item.objs[0].suffix!=='.mp4'" @click="opens(item,0)" style="width: 100%; height: 200px; background-size: cover; background-position: center; display: flex; justify-content: center; align-items: center; background-color: #ccc;">-->
+<!--          <image :src="item.objs[0].showURL" style="width: 100%; height: 100%; object-fit: cover;"></image>-->
+<!--        </div>-->
+
         <template v-for="(items,index) in item.objs">
           <template>
             <div v-if="index>0 && items.suffix!=='.mp4'" class="item"
@@ -75,9 +94,6 @@
               <video id="myVideo1" :src="`${items.showURL}.mp4`" controls style="width: 100%;height: 100px;"></video>
             </div>
           </template>
-          <!--          <template v-if="item.objs[0].suffix!=='.mp4'">-->
-          <!--            <div  class="item" :style="{ backgroundImage: `url(${items.showURL})`, backgroundSize: 'contain' }" @click="open(item,index)"></div>-->
-          <!--          </template>-->
         </template>
       </div>
     </view>
@@ -106,11 +122,15 @@
       <view class="uni-margin-wrap-popup">
         <view class="content-pop">
           <view style="width: 100%;height: 300px;background: #FFFFFF">
-             <textarea placeholder="请输入描述" v-model="value" @confirm="handleConfirm" :disabled="disabled"
-                       :style="{ 'background-color': disabled ? '#d9d9d9' : '' }"
-                       style="border: 1px solid rgba(0,0,0,.2);width: 300px;height:100%;font-size: 14px;padding: 10px"/>
+            <view
+                style="display: flex;justify-content: center;align-items: center;line-height: 40px;color:#E99D42;font-size: 16px;font-weight: bold; ">
+              当日公告
+            </view>
+            <textarea placeholder="请输入描述" v-model="value" @confirm="handleConfirm" :disabled="disabled"
+                      :style="{ 'background-color': disabled ? '#d9d9d9' : '' }"
+                      style="border: 1px solid rgba(0,0,0,.2);width: 300px;height:100%;font-size: 14px;padding: 10px"/>
             <uni-icons class="icon-item" color="#E99D42" type="close" size="25"
-                       style="position: absolute;right: 1px;top: 1px;" @click="closePopupNoticeActive"></uni-icons>
+                       style="position: absolute;right: 1px;top: 7px;" @click="closePopupNoticeActive"></uni-icons>
 
           </view>
           <button v-if="noticeText=='确认修改'" class="button" type="primary" @click="closePopupNotice">
@@ -142,7 +162,7 @@
           <view style="width: 100%;height: 300px;background: #FFFFFF">
             <view
                 style="display: flex;justify-content: center;align-items: center;line-height: 40px;color:#E99D42;font-size: 16px;font-weight: bold; ">
-              当日公告
+              系统公告
             </view>
             <textarea v-model="valueToday" @confirm="handleConfirm" :disabled="disabled"
                       :style="{ 'background-color': disabled ? '#d9d9d9' : '' }"
@@ -159,11 +179,8 @@
 </template>
 
 <script>
-import store from '@/store/index';
-import axios from 'axios'
-import {fi} from "date-fns/locale";
 import md5 from "js-md5";
-import {getVisitTotal, makeShareURL, querySign, updateAnnouncement} from "../../../common/vmeitime-http/user";
+import {baseUrl} from "../../../common/vmeitime-http/user";
 
 export default {
   name: "index",
@@ -189,13 +206,16 @@ export default {
       current: '0',
       fileAll: 0,
       fileDay: 0,
-      noticeText: "关闭"
+      noticeText: "关闭",
+      tags:[],
     }
   },
   onShow() {
     this.queryInfo()
     this.queryVisitTotalInfo()
     this.getPlatformInfo()
+    this.queryInfoActive()
+    console.log(baseUrl)
 
 
   },
@@ -219,6 +239,13 @@ export default {
 
   },
   methods: {
+    // 悬浮按钮
+    showMessage() {
+      uni.showToast({
+        title: '加客服QQ:362980082',
+        icon: 'none'
+      })
+    },
     // 批量新增
     toAddBatch() {
       uni.navigateTo({
@@ -422,15 +449,62 @@ export default {
         url: '/pages/user/main/indexAdd'
       })
     },
+    toggleTag(index) {
+      //this.noticeType=false
+      this.tags[index].active = !this.tags[index].active;
+      console.log(this.tags)
+      this.labels=[]
+      this.tags.forEach((item)=>{
+        if(item['active']){
+          this.labels.push(item['name'])
+        }
+      })
+     this.queryInfo()
+    },
+    queryInfoActive() {
+      uni.showLoading({
+        title: '加载中',
+        mask: true // 是否显示遮罩层
+      })
+      const param={
+        labels:['']
+      }
+      this.$api.user.getItem(param).then(res => {
+        if (res.status == 0) {
+          if (res.data) {
+            const tempArr  =(res.data.labels)
+            this.tags=[]
+            tempArr.forEach((item)=>{
+              const obj={
+                name:item,
+                active:false
+              }
+              this.tags.push(obj)
+            })
+          } else {
+            this.tags=[]
+          }
+
+        } else {
+
+        }
+        uni.hideLoading()
+
+      })
+    },
     queryInfo() {
       uni.showLoading({
         title: '加载中',
         mask: true // 是否显示遮罩层
       })
-      this.$api.user.getItem().then(res => {
+      const param={
+        labels:this.labels
+      }
+      this.$api.user.getItem(param).then(res => {
         if (res.status == 0) {
           this.infoList = []
           if (res.data) {
+
             this.infoList = res.data.collections
             this.fileAll = res.data.collections.length
             this.value = res.data.notice
@@ -652,4 +726,56 @@ page {
 .item:nth-child(3n+1) {
   clear: left; /* 每行的第一个子元素清除左浮动 */
 }
+
+.customer-service {
+  position: fixed;
+  bottom: 40px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  background-color: #2979ff;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
+  z-index: 9999;
+}
+
+.customer-service:hover {
+  cursor: pointer;
+  opacity: 0.8;
+}
+.active {
+  background-color: green;
+  padding: 2px;
+  color: #fff;
+}
+.img-content{
+  margin:20px auto;
+  margin-bottom: 20px;
+  padding: 5px;
+  width: 98%;
+  background: #FFFFFF;
+  border-radius: 3px;
+  border: 1px solid #999;
+  margin-top: 20px;
+}
+.tag {
+  display: inline-block;
+  border: 1px solid #2979ff;
+  border-radius: 20px;
+  padding: 2px 14px;
+  height: auto;
+  overflow: hidden;
+  margin-right: 5px;
+  background: #2979ff;
+  margin-bottom: 5px;
+  color: #ffffff;
+}
+.tag.active {
+  background-color: #ff7600;
+  color: #fff;
+}
+
 </style>

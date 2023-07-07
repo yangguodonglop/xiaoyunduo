@@ -72,7 +72,7 @@
 
 <script>
 import axios from 'axios'
-import {putLabel} from "../../../common/vmeitime-http/user";
+import {baseUrl, putLabel} from "../../../common/vmeitime-http/user";
 
 export default {
   name: "index",
@@ -234,16 +234,6 @@ export default {
           this.imageList=[]
           this.imageList=this.totalArr
           console.log(this.totalArr)
-          // if (this.totalArr.length >= 3) {
-          //   this.imageList =this.totalArr.slice(0, 3)
-          //   this.imageListActive = this.totalArr.slice(3, this.totalArr.length)
-          //   console.log(this.imageListActive)
-          // } else {
-          //   this.imageList = this.totalArr.slice(0, this.totalArr.length)
-          //   this.imageListActive = []
-          //
-          // }
-
           const formData = new FormData();
           console.log(this.totalArr.length)
           console.log(this.totalArr)
@@ -297,8 +287,9 @@ export default {
       this.formData.append('labels',JSON.stringify(tempArr))
 
       try {
+        const url=baseUrl+'/personal_collection/myCollection/putItem'
         const response = await axios.post(
-            'http://175.27.187.172:8001/personal_collection/myCollection/batchPutItem',
+            url,
             this.formData,
             {
               headers: {

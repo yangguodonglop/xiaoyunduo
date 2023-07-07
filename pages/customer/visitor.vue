@@ -1,5 +1,8 @@
 <template>
   <view style="position: relative">
+    <view class="customer-service" @click="showMessage">
+      <uni-icons type="chat" size="30" color="#fff"></uni-icons>
+    </view>
     <view>
       <view class="button-item">
         <view class="button-one" @click="addNotice()">
@@ -29,7 +32,7 @@
 <!--        </view>-->
         <view class="title" style="display: flex;align-items: center;justify-content:start;color: #ff7600">
           <!--        <img src="../login/images/test.png" width="45" height="50" alt="" style="margin-right: 5px;">-->
-          0{{ index + 1 }}号美妞
+          {{ index + 1 }}
         </view>
         <view>
 <!--          <uni-tag text="编辑" @click="toEdit(item)"  type="primary" size="small" style="margin-right: 10px;" />-->
@@ -148,6 +151,13 @@ export default {
   },
 
   methods: {
+    // 悬浮按钮
+    showMessage() {
+      uni.showToast({
+        title: '该功能正在开发中',
+        icon: 'none'
+      })
+    },
     toggleTag(index) {
       this.noticeType=false
       this.tags[index].active = !this.tags[index].active;
@@ -435,5 +445,24 @@ page {
   background-color: green;
   padding: 2px;
   color: #fff;
+}
+.customer-service {
+  position: fixed;
+  bottom: 40px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  background-color: #2979ff;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
+  z-index: 9999;
+}
+
+.customer-service:hover {
+  cursor: pointer;
+  opacity: 0.8;
 }
 </style>
