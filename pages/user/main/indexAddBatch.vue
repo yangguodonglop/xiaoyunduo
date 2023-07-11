@@ -45,7 +45,6 @@
             </text>
           </view>
         </view>
-        <text class="button-text" style="margin-left: 10px;" @click="linkAddLabel">管理标签</text>
       </view>
     </view>
     <view>
@@ -191,11 +190,6 @@ export default {
             position: 'bottom',
             title: '注册成功'
           });
-          // setTimeout(function(){
-          //   uni.navigateTo({
-          //     url:'/pages/user/main/index'
-          //   })
-          // },1000);
 
         } else {
           uni.showToast({
@@ -224,6 +218,7 @@ export default {
         const [error, res] = await uni.chooseFile({
           count: 10,
         });
+        console.log(res.tempFiles.length)
         if (error) {
           console.log(error);
         } else if (res.tempFiles && res.tempFiles.length > 0) {
@@ -233,14 +228,10 @@ export default {
           })
           this.imageList=[]
           this.imageList=this.totalArr
-          console.log(this.totalArr)
           const formData = new FormData();
-          console.log(this.totalArr.length)
-          console.log(this.totalArr)
           for (let i = 0; i < this.totalArr.length; i++) {
             const file = this.totalArr[i];
             const blob = await this.getBlobFromUrl(file.path);
-            console.log(blob)
             formData.append(`item_${i}`, blob, file.name);
           }
           this.formData = formData;
@@ -287,7 +278,7 @@ export default {
       this.formData.append('labels',JSON.stringify(tempArr))
 
       try {
-        const url=baseUrl+'/personal_collection/myCollection/putItem'
+        const url=baseUrl+'/personal_collection/myCollection/batchPutItem'
         const response = await axios.post(
             url,
             this.formData,

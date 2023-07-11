@@ -45,14 +45,14 @@
         <input type="text" style="color: #fff;"  v-model="verificationCode" placeholder="请输入6位输验证码">
         </view>
         <view style="display: flex;align-items: center;">
-          <button  size="mini"  class="mini-btn" type="primary" @tap="login">获取验证码</button>
+          <button size="mini" class="mini-btn" type="primary" @tap="sendCode" :disabled="countdown > 0">{{ countdown > 0 ? `${countdown} 秒后重新获取` : '获取验证码' }}</button>
         </view>
       </view>
     </view>
     <view style="margin: 0px 20;color: #0A98D5;text-align:left;font-size: 14px;line-height: 45px;margin-left:20px;display: flex;align-items: center"
           @tap="findPwd">
         <checkbox :checked="isCheckeds" @click="isChecked()" style="display: flex;align-items: center;margin: 5px 0;margin-left: 10px" />
-        <div  @click="toCheckProtocol()" style="display: flex;align-items: center">请阅读用户协议</div>
+        <div  @click="toCheckProtocol()" style="display: flex;align-items: center">请阅读《用户协议》</div>
 
     </view>
     <button class="submit"  style="background: #007aff" type="primary" @tap="login">立即注册</button>
@@ -61,13 +61,16 @@
 <script>
 import { XXTEA} from  './xxtea'
 import md5 from 'js-md5'
-import {register} from "../../../common/vmeitime-http/user";
+import {register, sendVerificationCode} from "../../../common/vmeitime-http/user";
 var that
 export default {
   name:'register',
   data() {
     const isUni = typeof(uni) !== 'undefined'
     return {
+      phone: '',  // 手机号码
+      countdown: 0,  // 倒计时
+      timer: null,  // 定时器
       isCheckeds:false,
       username: '',
       showPasswordType:'password',
@@ -98,6 +101,44 @@ export default {
     that= this;
   },
   methods: {
+    // 发送验证码
+    async sendCode() {
+      if (!this.username) {
+        wx.showToast({
+          title: '手机号码不能为空',
+          icon: 'none',
+        });
+        return;
+      }
+      const param={
+        accountName:this.username
+
+      }
+      var key = "ige1B5N";
+      const tempJson=JSON.stringify(param)
+      var encrypt_data = XXTEA.encryptToBase64(tempJson, key);
+      const res= await this.$api.user.sendVerificationCode(encrypt_data)
+      console.log(res)
+
+      if (res.status == 0) {
+      // if (key === 'ige1B5N') {
+        // 发送成功，开始倒计时
+        this.countdown = 60;
+        this.timer = setInterval(() => {
+          if (this.countdown > 0) {
+            this.countdown--;
+          } else {
+            clearInterval(this.timer);
+            this.timer = null;
+          }
+        }, 1000);
+      } else {
+        wx.showToast({
+          title: '验证码发送失败，请稍后再试',
+          icon: 'none',
+        });
+      }
+    },
     toCheckProtocol(){
       uni.navigateTo({
         url: '/pages/user/login/protocol'
@@ -133,7 +174,7 @@ export default {
       const str = {
         accountName:this.username,
         invitationCode:this.invitationCode,
-        verificationCode:'123456',
+        verificationCode:this.verificationCode,
         password:md5(this.password)
       }
       console.log(str)

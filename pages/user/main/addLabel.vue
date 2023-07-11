@@ -87,8 +87,8 @@ export default {
         if (res.status == 0) {
           uni.hideLoading()
           // this.queryLabel()
-          uni.navigateTo({
-            url: '/pages/user/main/indexAdd'
+          uni.switchTab({
+            url: '/pages/user/main/my'
           })
         } else {
         }

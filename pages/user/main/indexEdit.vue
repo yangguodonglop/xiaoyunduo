@@ -31,7 +31,6 @@
           </text>
         </view>
       </view>
-      <text class="button-text" style="margin-left: 10px;" @click="linkAddLabel">管理标签</text>
     </view>
 
     <view>
@@ -111,12 +110,6 @@ export default {
 
   },
   methods: {
-    // 管理标签
-    linkAddLabel(){
-      uni.navigateTo({
-        url:'/pages/user/main/addLabel'
-      })
-    },
     toggleTag(index) {
       this.tags[index].active = !this.tags[index].active;
     },

@@ -49,18 +49,18 @@
       </view>
       <div class="container">
         <video v-if="item.objs[0].suffix=='.mp4'" id="myVideo" :src="`${item.objs[0].showURL}.mp4`" controls style="width: 100%;"></video>
-        <div v-if="item.objs[0].suffix!=='.mp4'"  @click="opens(item,0)" style="width: 100%;height: 225px;background-repeat: no-repeat;background-position: center center;"  :style="{ backgroundImage: `url(${item.objs[0].showURL})`, backgroundSize: 'cover' }" ></div>
+        <video v-if="item.objs[0].suffix=='.MOV'" id="myVideo" :src="`${item.objs[0].showURL}`" controls style="width: 100%;"></video>
+        <div v-if="item.objs[0].suffix!=='.mp4' && item.objs[0].suffix!=='.MOV'"  @click="opens(item,0)" style="width: 100%;height: 225px;background-repeat: no-repeat;background-position: center center;"  :style="{ backgroundImage: `url(${item.objs[0].showURL})`, backgroundSize: 'cover' }" ></div>
         <template v-for="(items,index) in item.objs" >
           <template >
-            <div v-if="index>0 && items.suffix!=='.mp4'" class="item" :style="{ backgroundImage: `url(${items.showURL})`, backgroundSize: 'contain' }" @click="open(item,index)"></div>
+            <div v-if="index>0 && items.suffix!=='.mp4' && items.suffix!=='.MOV'" class="item" :style="{ backgroundImage: `url(${items.showURL})`, backgroundSize: 'contain' }" @click="open(item,index)"></div>
             <div v-if="index>0 && items.suffix=='.mp4'" class="item" >
               <video  id="myVideo1" :src="`${items.showURL}.mp4`" controls style="width: 100%;height: 100px;"></video>
             </div>
-<!--            <div v-if="index>0" class="item" :style="{ backgroundImage: `url(${items.showURL})`, backgroundSize: 'contain' }" @click="open(item,index)"></div>-->
+            <div v-if="index>0 && items.suffix=='.MOV'" class="item" >
+              <video  id="myVideo1" :src="`${items.showURL}`" controls style="width: 100%;height: 100px;"></video>
+            </div>
           </template>
-<!--          <template v-if="item.objs[0].suffix!=='.mp4'">-->
-<!--            <div  class="item" :style="{ backgroundImage: `url(${items.showURL})`, backgroundSize: 'contain' }" @click="open(item,index)"></div>-->
-<!--          </template>-->
         </template>
       </div>
     </view>
@@ -180,10 +180,7 @@ export default {
       this.$refs.popupNotice.close()
     },
     open(item,index) {
-      // this.infoListOpen = item['objs']
-      // console.log(this.infoListOpen)
-      // console.log(item['objs'],index)
-      if(item['objs'][0].suffix=='.mp4'){
+      if(item['objs'][0].suffix=='.mp4' || item['objs'][0].suffix=='.MOV'){
         this.infoListOpen = item['objs'].slice(1,item['objs'].length)
         this.current=index-1
       }else{
@@ -194,10 +191,7 @@ export default {
       this.$refs.popup.open('top')
     },
     opens(item,index) {
-      // this.infoListOpen = item['objs']
-      // console.log(this.infoListOpen)
-      // console.log(item['objs'],index)
-      if(item['objs'][0].suffix=='.mp4'){
+      if(item['objs'][0].suffix=='.mp4' || item['objs'][0].suffix=='.MOV'){
         this.infoListOpen = item['objs'].slice(1,item['objs'].length)
         this.current=index-1
       }else{

@@ -69,29 +69,36 @@
           #{{ label }}
         </view>
       </view>
-      <div class="container">
-        <video v-if="item.objs[0].suffix=='.mp4'" id="myVideo" :src="`${item.objs[0].showURL}.mp4`" controls
-               style="width: 100%;"></video>
+<!--      <div class="container">-->
+<!--        <video v-if="item.objs[0].suffix=='.mp4'" id="myVideo" :src="`${item.objs[0].showURL}.mp4`" controls-->
+<!--               style="width: 100%;"></video>-->
 <!--        <div v-if="item.objs[0].suffix!=='.mp4'" @click="opens(item,0)"-->
-<!--             style="width: 100%;height: 225px;background-repeat: no-repeat;background-position: center;"-->
-<!--             :style="{ backgroundImage: `url(${item.objs[0].showURL})`, backgroundSize: 'contain', }">-->
+<!--             style="width: 100%;height: 300px;background-repeat: no-repeat;background-position: center;">-->
+<!--          <img :src="item.objs[0].showURL"  style="width: 100%; height: 100%; object-fit: cover;">-->
 <!--        </div>-->
-        <div v-if="item.objs[0].suffix!=='.mp4'" @click="opens(item,0)"
-             style="width: 100%;height: 300px;background-repeat: no-repeat;background-position: center;">
-          <img :src="item.objs[0].showURL"  style="width: 100%; height: 100%; object-fit: cover;">
-        </div>
-
-<!--        <div v-if="item.objs[0].suffix!=='.mp4'" @click="opens(item,0)" style="width: 100%; height: 200px; background-size: cover; background-position: center; display: flex; justify-content: center; align-items: center; background-color: #ccc;">-->
-<!--          <image :src="item.objs[0].showURL" style="width: 100%; height: 100%; object-fit: cover;"></image>-->
-<!--        </div>-->
-
-        <template v-for="(items,index) in item.objs">
-          <template>
-            <div v-if="index>0 && items.suffix!=='.mp4'" class="item"
-                 :style="{ backgroundImage: `url(${items.showURL})`, backgroundSize: 'contain' }"
-                 @click="open(item,index)"></div>
-            <div v-if="index>0 && items.suffix=='.mp4'" class="item">
-              <video id="myVideo1" :src="`${items.showURL}.mp4`" controls style="width: 100%;height: 100px;"></video>
+<!--        <template v-for="(items,index) in item.objs">-->
+<!--          <template>-->
+<!--            <div v-if="index>0 && items.suffix!=='.mp4'" class="item"-->
+<!--                 :style="{ backgroundImage: `url(${items.showURL})`, backgroundSize: 'contain' }"-->
+<!--                 @click="open(item,index)"></div>-->
+<!--            <div v-if="index>0 && items.suffix=='.mp4'" class="item">-->
+<!--              <video id="myVideo1" :src="`${items.showURL}.mp4`" controls style="width: 100%;height: 100px;"></video>-->
+<!--            </div>-->
+<!--          </template>-->
+<!--        </template>-->
+<!--      </div>-->
+      <div class="container">
+        <video v-if="item.objs[0].suffix=='.mp4'" id="myVideo" :src="`${item.objs[0].showURL}.mp4`" controls style="width: 100%;"></video>
+        <video v-if="item.objs[0].suffix=='.MOV'" id="myVideo" :src="`${item.objs[0].showURL}`" controls style="width: 100%;"></video>
+        <div v-if="item.objs[0].suffix!=='.mp4' && item.objs[0].suffix!=='.MOV'"  @click="opens(item,0)" style="width: 100%;height: 225px;background-repeat: no-repeat;background-position: center center;"  :style="{ backgroundImage: `url(${item.objs[0].showURL})`, backgroundSize: 'cover' }" ></div>
+        <template v-for="(items,index) in item.objs" >
+          <template >
+            <div v-if="index>0 && items.suffix!=='.mp4' && items.suffix!=='.MOV'" class="item" :style="{ backgroundImage: `url(${items.showURL})`, backgroundSize: 'contain' }" @click="open(item,index)"></div>
+            <div v-if="index>0 && items.suffix=='.mp4'" class="item" >
+              <video  id="myVideo1" :src="`${items.showURL}.mp4`" controls style="width: 100%;height: 100px;"></video>
+            </div>
+            <div v-if="index>0 && items.suffix=='.MOV'" class="item" >
+              <video  id="myVideo1" :src="`${items.showURL}`" controls style="width: 100%;height: 100px;"></video>
             </div>
           </template>
         </template>
@@ -376,24 +383,18 @@ export default {
       this.$refs.popupNotice.close()
     },
     open(item, index) {
-      console.log(item['objs'], index)
-      if (item['objs'][0].suffix == '.mp4') {
+      if(item['objs'][0].suffix=='.mp4' || item['objs'][0].suffix=='.MOV'){
         this.infoListOpen = item['objs'].slice(1, item['objs'].length)
         this.current = index - 1
       } else {
         this.infoListOpen = item['objs']
         this.current = index
       }
-      //   this.infoListOpen = item['objs']
-      console.log(this.infoListOpen)
       // 通过组件定义的ref调用uni-popup方法 ,如果传入参数 ，type 属性将失效 ，仅支持 ['top','left','bottom','right','center']
       this.$refs.popup.open('top')
     },
     opens(item, index) {
-      // this.infoListOpen = item['objs']
-      // console.log(this.infoListOpen)
-      // console.log(item['objs'],index)
-      if (item['objs'][0].suffix == '.mp4') {
+      if(item['objs'][0].suffix=='.mp4' || item['objs'][0].suffix=='.MOV'){
         this.infoListOpen = item['objs'].slice(1, item['objs'].length)
         this.current = index - 1
       } else {

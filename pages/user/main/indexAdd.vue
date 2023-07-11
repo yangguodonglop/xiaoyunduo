@@ -35,7 +35,6 @@
             </text>
           </view>
         </view>
-        <text class="button-text" style="margin-left: 10px;" @click="linkAddLabel">管理标签</text>
       </view>
     </view>
     <view>
@@ -198,12 +197,7 @@ export default {
 
       })
     },
-    // 管理标签
-    linkAddLabel(){
-        uni.navigateTo({
-          url:'/pages/user/main/addLabel'
-        })
-    },
+
     handleConfirm(event){
       console.log(event)
 
@@ -219,6 +213,8 @@ export default {
           res.tempFiles.map((item)=>{
             this.totalArr.push(item)
           })
+          localStorage.setItem('addImgData', JSON.stringify(this.totalArr))
+
           if (this.totalArr.length >= 3) {
             this.imageList =this.totalArr.slice(0, 3)
             this.imageListActive = this.totalArr.slice(3, this.totalArr.length)
@@ -226,7 +222,6 @@ export default {
           } else {
             this.imageList = this.totalArr.slice(0, this.totalArr.length)
             this.imageListActive = []
-
           }
 
           const formData = new FormData();

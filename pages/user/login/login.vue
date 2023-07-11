@@ -35,7 +35,7 @@
     <view style="display: flex;color: rgb(10, 152, 213);justify-content: space-between">
       <view style="display: flex;">
       <checkbox :checked="isCheckeds" @click="isChecked()" style="display: flex;align-items: center;margin: 5px 0;margin-left: 25px" />
-      <div  @click="toCheckProtocol()" style="display: flex;align-items: center;font-size: 14px;">请阅读用户协议</div>
+      <div  @click="toCheckProtocol()" style="display: flex;align-items: center;font-size: 14px;">请阅读《用户协议》</div>
       </view>
       <view style="margin: 0px 20;color: #0A98D5;text-align:right;font-size: 14px;line-height: 40px;margin-right: 15px;"
             @tap="findPwd">忘记密码？

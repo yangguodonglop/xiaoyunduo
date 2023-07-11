@@ -16,9 +16,6 @@
         </view>
       </view>
       <view class="item item-active" v-if="uploadType">
-        <!--      <view class="button-one" @click="uploadImages">-->
-        <!--        确定上传-->
-        <!--      </view>-->
       </view>
       <view class="item">
         <view style="display: flex;">
@@ -43,6 +40,11 @@
 <!--          <span style="font-size: 16px;">邀请码：</span>{{ this.inviteCode == '' ? '暂无邀请码' : inviteCode.slice(0, 20) }}-->
         </view>
         <text class="button-text" @click="copyText">复制</text>
+      </view>
+      <view class="item">
+        <view class="button-one" style="background: #86deaa;"  @click="linkAddLabel">
+          管理标签
+        </view>
       </view>
       <view class="item">
         <view class="button-one" @click="toOpen()">
@@ -115,6 +117,12 @@ export default {
     this.queryVisitTotalInfo()
   },
   methods: {
+    // 管理标签
+    linkAddLabel(){
+      uni.navigateTo({
+        url:'/pages/user/main/addLabel'
+      })
+    },
     // 党日访问量
     queryVisitTotalInfo() {
       this.$api.user.getVisitTotal().then(res => {
@@ -300,7 +308,7 @@ export default {
 
       try {
 
-        const url=baseUrl+'/personal_collection/myCollection/putItem'
+        const url=baseUrl+'/personal_collection/accountInfo/updateHead'
         const response = await axios.post(
             url,
             this.formData,

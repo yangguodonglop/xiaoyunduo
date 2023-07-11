@@ -27,7 +27,7 @@
           <input style="color: #fff;"  v-model="verificationCode"  placeholder="请输入6位输验证码">
         </view>
         <view style="display: flex;align-items: center;">
-          <button  size="mini"  class="mini-btn" type="primary" @tap="toFindPassword">获取验证码</button>
+          <button size="mini" class="mini-btn" type="primary" @tap="sendCode" :disabled="countdown > 0">{{ countdown > 0 ? `${countdown} 秒后重新获取` : '获取验证码' }}</button>
         </view>
       </view>
       <view class="line" />
@@ -58,6 +58,9 @@ export default {
   data() {
     const isUni = typeof(uni) !== 'undefined'
     return {
+      phone: '',  // 手机号码
+      countdown: 0,  // 倒计时
+      timer: null,  // 定时器
       showPasswordType:'password',
       username: '',
       // userpwd: 'Cjwsjy@ddk_%8',
@@ -83,6 +86,44 @@ export default {
     that= this;
   },
   methods: {
+    // 发送验证码
+    async sendCode() {
+      if (!this.username) {
+        wx.showToast({
+          title: '手机号码不能为空',
+          icon: 'none',
+        });
+        return;
+      }
+      const param={
+        accountName:this.username
+
+      }
+      var key = "ige1B5N";
+      const tempJson=JSON.stringify(param)
+      var encrypt_data = XXTEA.encryptToBase64(tempJson, key);
+      const res= await this.$api.user.sendVerificationCode(encrypt_data)
+      console.log(res)
+
+      if (res.status == 0) {
+        // if (key === 'ige1B5N') {
+        // 发送成功，开始倒计时
+        this.countdown = 60;
+        this.timer = setInterval(() => {
+          if (this.countdown > 0) {
+            this.countdown--;
+          } else {
+            clearInterval(this.timer);
+            this.timer = null;
+          }
+        }, 1000);
+      } else {
+        wx.showToast({
+          title: '验证码发送失败，请稍后再试',
+          icon: 'none',
+        });
+      }
+    },
     showPassword(){
       this.showPasswordType=!this.showPasswordType
       if(this.showPasswordType){
@@ -106,6 +147,30 @@ export default {
       that.pwdType = that.pwdType === 'text' ? 'password' : 'text'
     },
     login() {
+      if(this.username==''){
+        uni.showToast({
+          icon: 'error',
+          position: 'bottom',
+          title: '请输入手机号'
+        });
+        return false
+      }
+      if(this.verificationCode==''){
+        uni.showToast({
+          icon: 'error',
+          position: 'bottom',
+          title: '请输入验证码'
+        });
+        return false
+      }
+      if(this.newPassword==''){
+        uni.showToast({
+          icon: 'error',
+          position: 'bottom',
+          title: '请输入密码'
+        });
+        return false
+      }
       //登录
       console.log(this.username)
       console.log(this.verificationCode)
@@ -114,7 +179,6 @@ export default {
 
         accountName:this.username,
         verificationCode:this.verificationCode,
-        // invitationCode:'E10ADC3949BA59ABBE56E057F20F883E',
         password:md5(this.newPassword)
       }
       var key = "ige1B5N";

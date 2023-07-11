@@ -31,6 +31,21 @@ export const getMyInfo = (data) => {
 
     })
 }
+export const sendVerificationCode = (data) => {
+
+    return http.request({
+        baseUrl: baseUrl,
+        url: '/personal_collection/service/sendVerificationCode',
+        method: 'POST',
+        header: {
+            'sID': JSON.parse(localStorage.getItem('userData')),
+            'content-type': 'application/x-www-form-urlencoded',
+        },
+        data,
+
+
+    })
+}
 export const updateNick = (data) => {
 
     return http.request({
@@ -328,6 +343,7 @@ export default {
     getLabel,
     getOwnerInfo,
     getAgreement,
+    sendVerificationCode,
     baseUrl
 
 }
