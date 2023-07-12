@@ -181,6 +181,23 @@
         </view>
       </view>
     </uni-popup>
+    <!-- 弹窗组件 -->
+    <view class="modal-mask" v-show="isModalVisible">
+      <view class="modal-wrapper">
+        <view class="modal-container">
+          <view class="modal-header">
+            <view class="modal-title">客服QQ</view>
+            <uni-icons class="icon-item" color="#E99D42" type="close" size="25"
+                       style="position: absolute;right: 1px;top: 7px;" @click="closeMessage"></uni-icons>
+<!--            <uni-icons type="cross" size="24" color="#666" @click="closeMessage"></uni-icons>-->
+          </view>
+          <view class="modal-content">
+            <view class="qq-number">{{qqNumber}}</view>
+            <button class="copy-button" @click="copyToClipboard">复制</button>
+          </view>
+        </view>
+      </view>
+    </view>
   </view>
 
 </template>
@@ -193,7 +210,8 @@ export default {
   name: "index",
   data() {
     return {
-      // background: ['color1', 'color2', 'color3'],
+      isModalVisible: false, // 弹窗是否可见
+      qqNumber: '362960082', // QQ 号码
       indicatorDots: true,
       autoplay: false,
       interval: 2000,
@@ -222,23 +240,11 @@ export default {
     this.queryVisitTotalInfo()
     this.getPlatformInfo()
     this.queryInfoActive()
-    console.log(baseUrl)
 
 
   },
   mounted() {
-    const lastLoginTime = document.cookie.replace(/(?:(?:^|.*;\s*)lastLoginTime\s*\=\s*([^;]*).*$)|^.*$/, '$1');
-    if (!lastLoginTime) {
-      this.$refs.popupNoticeToday.open()
-      document.cookie = `lastLoginTime=${new Date().getTime()}; path=/`;
-    }
-    const now = new Date().getTime();
-    if (now - lastLoginTime >= 24 * 60 * 60 * 1000) {
-      this.$refs.popupNoticeToday.open()
-      document.cookie = `lastLoginTime=${new Date().getTime()}; path=/`;
-    } else {
-      this.$refs.popupNoticeToday.close()
-    }
+
 
   },
   handleConfirm(event) {
@@ -246,12 +252,31 @@ export default {
 
   },
   methods: {
-    // 悬浮按钮
+    // 显示弹窗
     showMessage() {
-      uni.showToast({
-        title: '加客服QQ:362980082',
-        icon: 'none'
-      })
+      this.isModalVisible = true;
+    },
+    // 关闭弹窗
+    closeMessage() {
+      this.isModalVisible = false;
+    },
+    // 复制 QQ 号码到剪贴板
+    copyToClipboard() {
+      uni.setClipboardData({
+        data: this.qqNumber,
+        success() {
+          uni.showToast({
+            title: '已复制',
+            icon: 'none',
+          });
+        },
+        fail() {
+          uni.showToast({
+            title: '复制失败，请重试',
+            icon: 'none',
+          });
+        },
+      });
     },
     // 批量新增
     toAddBatch() {
@@ -505,10 +530,11 @@ export default {
         if (res.status == 0) {
           this.infoList = []
           if (res.data) {
-
             this.infoList = res.data.collections
             this.fileAll = res.data.collections.length
             this.value = res.data.notice
+            this.systemNotice()
+
           } else {
             this.infoList = []
             this.value = ''
@@ -537,10 +563,22 @@ export default {
         } else {
 
         }
-
-
       })
     },
+    systemNotice(){
+      const lastLoginTime = document.cookie.replace(/(?:(?:^|.*;\s*)lastLoginTime\s*\=\s*([^;]*).*$)|^.*$/, '$1');
+      if (!lastLoginTime) {
+        this.$refs.popupNoticeToday.open()
+        document.cookie = `lastLoginTime=${new Date().getTime()}; path=/`;
+      }
+      const now = new Date().getTime();
+      if (now - lastLoginTime >= 24 * 60 * 60 * 1000) {
+        this.$refs.popupNoticeToday.open()
+        document.cookie = `lastLoginTime=${new Date().getTime()}; path=/`;
+      } else {
+        this.$refs.popupNoticeToday.close()
+      }
+    }
 
   }
 
@@ -777,6 +815,78 @@ page {
 .tag.active {
   background-color: #ff7600;
   color: #fff;
+}
+/* 弹窗遮罩层 */
+.modal-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 弹窗容器 */
+.modal-wrapper {
+  width: 80%;
+  max-width: 400px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+}
+
+/* 弹窗头部 */
+.modal-header {
+  padding: 16px;
+  font-size: 20px;
+  font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #eee;
+  position: relative;
+}
+
+/* 弹窗标题 */
+.modal-title {
+  flex: 1;
+  text-align: center;
+}
+
+/* 弹窗内容区域 */
+.modal-content {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* QQ 号码 */
+.qq-number {
+  font-size: 24px;
+  margin-bottom: 16px;
+}
+
+/* 复制按钮 */
+.copy-button {
+  background: #007aff;
+  color: #fff;
+  border-radius: 20px;
+  padding: 8px 16px;
+  font-size: 16px;
+  margin-top: 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.copy-button:hover {
+  background: #0051a8;
 }
 
 </style>

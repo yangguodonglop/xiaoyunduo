@@ -107,15 +107,17 @@ http.interceptor.response = (res) => {
 			// });
 			return res;
 		} else {
-			err = res.data.error && res.data.error.msg || '服务器响应错误!'
+			// err = res.data.error && res.data.error.msg || '服务器响应错误!'
 			uni.showModal({
-				title: '提示',
+				title: 'token过期，请重新登录！',
 				content: err,
 				confirmColor: '#3CC51F',
 				showCancel: false,
 				success: function (msg) {
 					if (msg.confirm) {
-
+						uni.navigateTo({
+							url: '/pages/user/login/login'
+						})
 					}
 				}
 			});
