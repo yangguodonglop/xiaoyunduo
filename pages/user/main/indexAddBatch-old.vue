@@ -1,11 +1,30 @@
 <template>
   <view>
     <view class="uni-margin-wrap">
+<!--      <view style="display: flex;flex-direction:column">-->
+<!--        <view class="uni-margin-content" v-if="imageList.length>=1">-->
+<!--          <div class="item-img" v-for="item in imageList">-->
+<!--            <video class="img_pwd_switch girl-img" v-if="item.type=='video/mp4'" id="myVideo" :src="item.path" controls style="width: 100%;"></video>-->
+<!--            <image class="img_pwd_switch girl-img" v-if="item.type!=='video/mp4'" :src="item.path"/>-->
+<!--          </div>-->
+<!--        </view>-->
+<!--        <view class="uni-margin-content" v-if="imageListActive.length>=1&&imageList.length>=1">-->
+<!--          <div class="item-img" v-for="item in imageListActive">-->
+<!--            <video class="img_pwd_switch girl-img" v-if="item.type=='video/mp4'" id="myVideo" :src="item.path" controls style="width: 100%;"></video>-->
+<!--            <image class="img_pwd_switch girl-img" v-if="item.type!=='video/mp4'" :src="item.path"/>-->
+<!--          </div>-->
+<!--        </view>-->
+<!--        <view style="display: flex;justify-content: center;align-items: center;height: 40px;"  v-if="imageListActive.length==0&&imageList==0">暂无内容</view>-->
+<!--      </view>-->
       <div class="container" v-if="imageList.length>=1">
-      <div class="item" v-for="(item,index) in imageList">
-        <uni-icons class="icon-item" color="red" type="close" size="25" @click="deleteImg(index, item)"></uni-icons>
+      <div class="item" v-for="item in imageList">
+<!--        <uni-icons class="icon-item" color="red" type="close" size="25" @click="deleteImg(item['id'])"></uni-icons>-->
                     <video class="img_pwd_switch girl-img" v-if="item.type=='video/mp4'" id="myVideo" :src="item.path" controls style="width: 100%;"></video>
                     <image class="img_pwd_switch girl-img" v-if="item.type!=='video/mp4'" :src="item.path"/>
+
+<!--        <video class="img_pwd_switch girl-img" v-if="item.suffix=='.mp4' && !item.suffixShow " id="myVideo" :src="`${item.showURL}.mp4`"  controls style="width: 100%;"></video>-->
+<!--        <video class="img_pwd_switch girl-img" v-if="item.suffix=='.mp4' && item.suffixShow " id="myVideo" :src="`${item.showURL}`"  controls style="width: 100%;"></video>-->
+<!--        <image class="img_pwd_switch girl-img" v-if="item.suffix!=='.mp4'" :src="item.showURL"/>-->
       </div>
       </div>
       <view class="img-describe">
@@ -31,6 +50,18 @@
     <view>
       <button @click="chooseImages">选择文件</button>
       <button @click="uploadImages">保存</button>
+    </view>
+    <view v-if="showAddTagDialog" class="add-tag-dialog">
+      <view class="dialog-container">
+        <view class="dialog-header">新增标签</view>
+        <view class="dialog-body">
+          <input type="text" v-model="newTags" placeholder="请输入标签名称，多个标签用逗号隔开" />
+        </view>
+        <view class="dialog-footer">
+          <button class="confirm-button" @click="addTags">确认</button>
+          <button class="cancel-button" @click="showAddTagDialog = false">取消</button>
+        </view>
+      </view>
     </view>
 
 
@@ -87,9 +118,6 @@ export default {
  //
  //  },
   methods: {
-    deleteImg(index, item) {
-      this.imageList.splice(index, 1);
-    },
     toggleTag(index) {
       this.tags[index].active = !this.tags[index].active;
     },

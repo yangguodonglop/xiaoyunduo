@@ -11,7 +11,7 @@
         <view class="button-one" @click="checkNotice" style="background: #81B337;">
           我的公告
         </view>
-        <uni-icons style="position: absolute;top:4px;right: 25px;z-index: 100000;width: 30px;color: #2979ff;"
+        <uni-icons style="position: absolute;top:4px;right: 25px;width: 30px;color: #2979ff;"
                    class="icon-item" type="compose" size="30" @click="addNotice"></uni-icons>
       </view>
       <view class="button-item">

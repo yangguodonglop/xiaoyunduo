@@ -42,13 +42,13 @@
         <text class="button-text" @click="copyText">复制</text>
       </view>
       <view class="item">
-        <view class="button-one" style="background: #86deaa;"  @click="linkAddLabel">
-          管理标签
+        <view class="button-one" @click="toOpen()">
+          生成邀请码
         </view>
       </view>
       <view class="item">
-        <view class="button-one" @click="toOpen()">
-          生成邀请码
+        <view class="button-one" style="background: #86deaa;"  @click="linkAddLabel">
+          管理标签
         </view>
       </view>
       <view class="item">
