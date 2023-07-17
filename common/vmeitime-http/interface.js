@@ -72,7 +72,25 @@ export default {
 				// 统一的响应日志记录
 				_reslog(response)
 				if (statusCode === 200) { //成功
-					resolve(response.data);
+					let err = null;
+					if(response.data.status=='-105'){
+						uni.showModal({
+							title: 'token过期，请重新登录！',
+							content: err,
+							confirmColor: '#3CC51F',
+							showCancel: false,
+							success: function (msg) {
+								if (msg.confirm) {
+									uni.navigateTo({
+										url: '/pages/user/login/login'
+									})
+								}
+							}
+						});
+					}
+					else {
+						resolve(response.data);
+					}
 				} else {
 					reject(response)
 				}
