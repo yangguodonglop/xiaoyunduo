@@ -262,11 +262,13 @@ export default {
     },
     // 复制 QQ 号码到剪贴板
     copyToClipboard() {
+      let _this=this
       uni.setClipboardData({
         data: this.qqNumber,
         success() {
+          _this.isModalVisible = false;
           uni.showToast({
-            title: '已复制',
+            title: '复制成功',
             icon: 'none',
           });
         },

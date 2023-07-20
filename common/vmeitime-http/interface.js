@@ -16,6 +16,7 @@ export default {
 		method: "GET",
 		// dataType: "json",  /* 如设为json，会对返回的数据做一次 JSON.parse */
 		responseType: "text",
+		timeout: 3600000, // 该请求使用的超时时间为一个小时
 		success() {},
 		fail() {},
 		complete() {}

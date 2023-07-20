@@ -11,7 +11,8 @@
       <view class="img-describe">
         <view class="uni-textarea">
           <textarea placeholder="请输入描述" v-model="value" @confirm="handleConfirm"
-                    style="border: 1px solid rgba(0,0,0,.2);width: 100%;font-size: 14px;padding-top: 10px"/>
+          style="border: 1px solid rgba(0,0,0,.2);width: 100%;font-size: 14px;padding-top: 10px;text-indent:0px; padding: 10px"/>
+
         </view>
       </view>
       <view class="labels">
