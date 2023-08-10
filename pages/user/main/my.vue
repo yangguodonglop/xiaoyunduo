@@ -81,6 +81,25 @@
         </view>
       </view>
     </view>
+    <uni-popup ref="popupNoticeToday" type="center" style="position: absolute;z-index: 111110;top: -10px;">
+      <view class="uni-margin-wrap-popup">
+        <view class="content-pop">
+
+          <view style="width: 100%;height: 300px;background: #FFFFFF">
+            <view
+                style="display: flex;justify-content: center;align-items: center;line-height: 40px;color:#E99D42;font-size: 16px;font-weight: bold; ">
+               友情提示
+            </view>
+            <textarea v-model="valueToday" @confirm="handleConfirm" :disabled="true"
+                      :style="{ 'background-color': '#d9d9d9'}"
+                      style="border: 1px solid rgba(0,0,0,.2);width: 300px;font-size:16px;height:100%;font-size: 15px;padding: 10px;padding-right:0px;color: #38810d;"/>
+          </view>
+          <button class="button" type="primary" @click="closePopupNoticeToday">
+            <text class="button-text">关闭</text>
+          </button>
+        </view>
+      </view>
+    </uni-popup>
   </view>
 </template>
 
@@ -93,6 +112,8 @@ export default {
   name: "my",
   data() {
     return {
+      valueToday: '您的会员还有3天到期，如需继续享受该业务，请联系管理员进行充值！',
+      popupNoticeToday:true,
       inviteCode: '',
       phone: '',
       nickName: '',
@@ -115,8 +136,18 @@ export default {
     this.getMyInfo()
     this.getPlatformInfo()
     this.queryVisitTotalInfo()
+
+  },
+  mounted(){
+
   },
   methods: {
+    // 关闭弹窗
+    closePopupNoticeToday(){
+      localStorage.setItem('again', 'true')
+      this.$refs.popupNoticeToday.close()
+
+    },
     // 管理标签
     linkAddLabel(){
       uni.navigateTo({
@@ -145,7 +176,6 @@ export default {
     saveName() {
       const nickName = this.newName
       this.$api.user.updateNick(nickName).then(res => {
-        console.log(res)
         if (res.status == 0) {
           this.getMyInfo()
           this.showEditNameDialog = false;
@@ -180,7 +210,6 @@ export default {
     },
     getPlatformInfo() {
       this.$api.user.getPlatformInfo().then(res => {
-        console.log(res)
         if (res.status == 0) {
           // this.inviteCode=res.data.code
         } else {
@@ -191,7 +220,6 @@ export default {
     },
     getMyInfo() {
       this.$api.user.getMyInfo().then(res => {
-        console.log(res)
         if (res.status == 0) {
           this.phone = res.data.accName
           this.nickName = res.data.nickName
@@ -203,13 +231,29 @@ export default {
           } else {
             this.expiration = format(tempTime * 1000, 'yyyy-MM-dd')
           }
-          // endTime: format(new Date(), "yyyy-MM-dd"),
           if (tempImgUrl.indexOf("personal_collection") != -1) {
             this.imgSrc = res.data.headURL
           } else {
             this.imgSrc = '../../../static/img/avatar.jpg'
           }
-          console.log(this.imgSrc)
+          const lastLoginTime = document.cookie.replace(/(?:(?:^|.*;\s*)lastLoginTime\s*\=\s*([^;]*).*$)|^.*$/, '$1');
+          const expirationTime = tempTime; // 会员到期时间戳，这里假设为1696867200
+
+          const now = Math.floor(Date.now() / 1000); // 当前时间戳（秒）
+          // const now=  1696608000
+
+          const threeDaysInSeconds = 3 * 24 * 60 * 60; // 3天的秒数
+            if (expirationTime - now <= threeDaysInSeconds) {
+              const nowType=    localStorage.getItem('again',)
+              if(!nowType || nowType=='false'){
+                this.$refs.popupNoticeToday.open();
+                document.cookie = `lastLoginTime=${new Date().getTime()}; path=/`;
+              }
+
+            }
+
+
+
         } else {
         }
 
@@ -222,7 +266,6 @@ export default {
         mask: true // 是否显示遮罩层
       })
       this.$api.user.makeInviteCode().then(res => {
-        console.log(res)
         if (res.status == 0) {
           this.inviteCode = res.data.code
           uni.hideLoading()
@@ -250,7 +293,6 @@ export default {
           count: 9,
         });
         if (error) {
-          console.log(error);
         } else if (res.tempFiles && res.tempFiles.length > 0) {
           res.tempFiles.map((item) => {
             this.totalArr.push(item)
@@ -489,4 +531,25 @@ export default {
   margin-left: 10px;
 }
 
+.uni-margin-wrap-popup {
+  width: 100%;
+  height: 100%;
+
+  ::v-deep uni-image {
+    width: 100%;
+    height: 550px;
+  }
+
+  ::v-deep uni-swiper {
+    height: 550px;
+  }
+
+  .uni-margin-wrap-popup {
+    z-index: 1001;
+  }
+
+  ::v-deep .uni-popup {
+    z-index: 1001;
+  }
+}
 </style>

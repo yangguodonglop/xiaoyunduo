@@ -76,7 +76,8 @@ export default {
       selected: "", // 当前选中的选项
       tags: [
 
-      ]
+      ],
+      allLength:[]
     }
   },
   onShow(){
@@ -193,7 +194,7 @@ export default {
         const [error, res] = await uni.chooseFile({
           count: 11,
         });
-        // this.uploadNum+=res.tempFiles.length
+        this.uploadNum+=res.tempFiles.length
         // console.log(this.uploadNum)
         // console.log(res.tempFiles.length)
         if(res.tempFiles.length>10){
@@ -228,7 +229,6 @@ export default {
         console.log(e);
       }
     },
-
     async getBlobFromUrl(url) {
       return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
@@ -248,6 +248,14 @@ export default {
       });
     },
     async uploadImages() {
+      if(this.imageList.length>10){
+        uni.showToast({
+          icon: 'error',
+          position: 'bottom',
+          title: '一次最多选择10个文件'
+        });
+        return false
+      }
       console.log(this.tags)
       const tempArr=[]
       this.tags.forEach((item)=>{
@@ -273,6 +281,7 @@ export default {
                 'sID': JSON.parse(localStorage.getItem('userData')),
                 'Content-Type': 'multipart/form-data',
               },
+              timeout: 1800000, // 设置超时时间为 30 分钟
             }
         );
         if(response.data.status==0){
@@ -282,8 +291,15 @@ export default {
               url:'/pages/user/main/index'
             })
           },1000);
-
-        }else{
+        }else if(response.data.status==-106){
+          uni.hideLoading()
+          uni.showToast({
+            icon: 'error',
+            position: 'bottom',
+            title: '你的Vip已过期!'
+          });
+        }
+        else{
           uni.showToast({
             icon: 'error',
             position: 'bottom',

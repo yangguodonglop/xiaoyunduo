@@ -165,7 +165,6 @@
     <uni-popup ref="popupNoticeToday" type="center" style="position: absolute;z-index: 111110;top: -10px;">
       <view class="uni-margin-wrap-popup">
         <view class="content-pop">
-
           <view style="width: 100%;height: 300px;background: #FFFFFF">
             <view
                 style="display: flex;justify-content: center;align-items: center;line-height: 40px;color:#E99D42;font-size: 16px;font-weight: bold; ">

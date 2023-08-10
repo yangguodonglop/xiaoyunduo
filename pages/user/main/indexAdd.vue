@@ -292,6 +292,7 @@ export default {
                 'sID': JSON.parse(localStorage.getItem('userData')),
                 'Content-Type': 'multipart/form-data',
               },
+              timeout: 1800000, // 设置超时时间为 30 分钟
             }
         );
         if(response.data.status==0){
@@ -302,7 +303,15 @@ export default {
             })
           },1000);
 
-        }else{
+        }else if(response.data.status==-106){
+          uni.hideLoading()
+          uni.showToast({
+            icon: 'error',
+            position: 'bottom',
+            title: '你的Vip已过期!'
+          });
+        }
+        else{
           uni.showToast({
             icon: 'error',
             position: 'bottom',
